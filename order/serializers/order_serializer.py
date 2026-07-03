@@ -21,4 +21,5 @@ class OrderSerializer(serializers.ModelSerializer):
         for product_data in products_data:
             product = ProductSerializer().create(product_data)
             order.product.add(product)
+            
         return order
