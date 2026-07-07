@@ -11,7 +11,7 @@ class CategoryViewSetTestCase(APITestCase):
         CategoryFactory(title="Fiction", slug="fiction")
         CategoryFactory(title="Science", slug="science")
 
-        response = self.client.get(reverse("category-list"))
+        response = self.client.get(reverse("category-list", kwargs={"version": "v1"}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -23,7 +23,9 @@ class CategoryViewSetTestCase(APITestCase):
             description="Horror books",
         )
 
-        response = self.client.get(reverse("category-detail", kwargs={"pk": category.pk}))
+        response = self.client.get(
+            reverse("category-detail", kwargs={"version": "v1", "pk": category.pk})
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["title"], "Horror")
@@ -38,7 +40,9 @@ class CategoryViewSetTestCase(APITestCase):
             "active": True,
         }
 
-        response = self.client.post(reverse("category-list"), payload, format="json")
+        response = self.client.post(
+            reverse("category-list", kwargs={"version": "v1"}), payload, format="json"
+        )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Category.objects.count(), 1)
@@ -48,7 +52,7 @@ class CategoryViewSetTestCase(APITestCase):
         category = CategoryFactory(title="Old Title", slug="old-title")
 
         response = self.client.patch(
-            reverse("category-detail", kwargs={"pk": category.pk}),
+            reverse("category-detail", kwargs={"version": "v1", "pk": category.pk}),
             {"title": "Updated Title"},
             format="json",
         )
@@ -60,7 +64,9 @@ class CategoryViewSetTestCase(APITestCase):
     def test_delete_category(self):
         category = CategoryFactory()
 
-        response = self.client.delete(reverse("category-detail", kwargs={"pk": category.pk}))
+        response = self.client.delete(
+            reverse("category-detail", kwargs={"version": "v1", "pk": category.pk})
+        )
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Category.objects.count(), 0)

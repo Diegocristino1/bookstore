@@ -1,16 +1,14 @@
+"""
+URL configuration for bookstore project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/6.0/topics/http/urls/
+"""
 from django.contrib import admin
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
-
-from order.viewsets import OrderViewSet
-from product.viewsets import CategoryViewSet, ProductViewSet
-
-router = DefaultRouter()
-router.register(r"categories", CategoryViewSet, basename="category")
-router.register(r"products", ProductViewSet, basename="product")
-router.register(r"orders", OrderViewSet, basename="order")
+from django.urls import include, path, re_path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v1/", include(router.urls)),
+    re_path("bookstore/(?P<version>(v1|v2))/", include("order.urls")),
+    re_path("bookstore/(?P<version>(v1|v2))/", include("product.urls")),
 ]

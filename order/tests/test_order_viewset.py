@@ -12,7 +12,7 @@ class OrderViewSetTestCase(APITestCase):
         OrderFactory()
         OrderFactory()
 
-        response = self.client.get(reverse("order-list"))
+        response = self.client.get(reverse("order-list", kwargs={"version": "v1"}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -24,7 +24,9 @@ class OrderViewSetTestCase(APITestCase):
         product_b = ProductFactory(price=30, category=[category])
         order = OrderFactory(user=user, product=[product_a, product_b])
 
-        response = self.client.get(reverse("order-detail", kwargs={"pk": order.pk}))
+        response = self.client.get(
+            reverse("order-detail", kwargs={"version": "v1", "pk": order.pk})
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["user"], user.id)
@@ -53,7 +55,9 @@ class OrderViewSetTestCase(APITestCase):
             ],
         }
 
-        response = self.client.post(reverse("order-list"), payload, format="json")
+        response = self.client.post(
+            reverse("order-list", kwargs={"version": "v1"}), payload, format="json"
+        )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Order.objects.count(), 1)
@@ -66,7 +70,9 @@ class OrderViewSetTestCase(APITestCase):
     def test_delete_order(self):
         order = OrderFactory()
 
-        response = self.client.delete(reverse("order-detail", kwargs={"pk": order.pk}))
+        response = self.client.delete(
+            reverse("order-detail", kwargs={"version": "v1", "pk": order.pk})
+        )
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Order.objects.count(), 0)
