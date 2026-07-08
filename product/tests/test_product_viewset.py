@@ -11,10 +11,12 @@ class ProductViewSetTestCase(APITestCase):
         ProductFactory(title="Book A", price=20)
         ProductFactory(title="Book B", price=30)
 
-        response = self.client.get(reverse("product-list", kwargs={"version": "v1"}))
+        response = self.client.get(
+            reverse("product-list", kwargs={"version": "v1"}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data["count"], 2)
+        self.assertEqual(len(response.data["results"]), 2)
 
     def test_retrieve_product_with_categories(self):
         category = CategoryFactory(title="Drama", slug="drama")
@@ -22,7 +24,8 @@ class ProductViewSetTestCase(APITestCase):
         product.category.add(category)
 
         response = self.client.get(
-            reverse("product-detail", kwargs={"version": "v1", "pk": product.pk})
+            reverse("product-detail",
+                    kwargs={"version": "v1", "pk": product.pk})
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -62,7 +65,8 @@ class ProductViewSetTestCase(APITestCase):
         product = ProductFactory(title="Old Book", price=10)
 
         response = self.client.patch(
-            reverse("product-detail", kwargs={"version": "v1", "pk": product.pk}),
+            reverse("product-detail",
+                    kwargs={"version": "v1", "pk": product.pk}),
             {"price": 25},
             format="json",
         )
@@ -75,7 +79,8 @@ class ProductViewSetTestCase(APITestCase):
         product = ProductFactory()
 
         response = self.client.delete(
-            reverse("product-detail", kwargs={"version": "v1", "pk": product.pk})
+            reverse("product-detail",
+                    kwargs={"version": "v1", "pk": product.pk})
         )
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
