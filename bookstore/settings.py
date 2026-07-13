@@ -44,15 +44,6 @@ INSTALLED_APPS = [
     "order",
 ]
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
-}
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -133,7 +124,34 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# ============================================================================
+# CONFIGURAÇÃO DE AUTENTICAÇÃO - DJANGO REST FRAMEWORK
+# ============================================================================
+# O que foi implementado:
+# - Autenticação por Token personalizada (CustomTokenAuthentication)
+# - Permissão padrão: IsAuthenticated (requer autenticação para acessar endpoints)
+# - Paginação: PageNumberPagination com 10 itens por página
+#
+# Endpoints públicos (sem autenticação):
+# - POST /api/auth/register/ - Registrar novo usuário
+# - POST /api/auth/login/ - Fazer login e obter token
+#
+# Endpoints protegidos (requerem token):
+# - POST /api/auth/logout/ - Fazer logout (requer token)
+# - GET/POST /bookstore/v1/orders/ - Pedidos (requerem token)
+#
+# Endpoints públicos (sem autenticação por configuração específica):
+# - GET /bookstore/v1/products/ - Produtos (removida proteção)
+# - GET /bookstore/v1/categories/ - Categorias (removida proteção)
+# ============================================================================
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'bookstore.authentication.CustomTokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }

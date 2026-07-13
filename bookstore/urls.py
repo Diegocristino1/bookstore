@@ -14,14 +14,32 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# api/urls.py
+# ============================================================================
+# ENDPOINTS DE AUTENTICAÇÃO - SISTEMA DE AUTENTICAÇÃO COM TOKEN
+# ============================================================================
+# O que foi implementado:
+# - POST /api/auth/register/ - Registrar novo usuário (sem autenticação)
+# - POST /api/auth/login/ - Fazer login e obter token (sem autenticação)
+# - POST /api/auth/logout/ - Fazer logout (requer token)
+#
+# Requisições autenticadas devem incluir o header:
+# Authorization: Bearer <token>
+# ============================================================================
+
 from django.contrib import admin
 from django.urls import path, re_path, include
-from rest_framework.authtoken.views import obtain_auth_token
+from bookstore.auth_views import login_view, logout_view, register_view
 
 urlpatterns = [
+    # Admin
     path("admin/", admin.site.urls),
-    path("api-token-auth/", obtain_auth_token),
+
+    # Endpoints de Autenticação
+    path("api/auth/register/", register_view, name="register"),
+    path("api/auth/login/", login_view, name="login"),
+    path("api/auth/logout/", logout_view, name="logout"),
+
+    # APIs de Pedidos e Produtos (versionadas)
     re_path('bookstore/(?P<version>(v1|v2))/', include('order.urls')),
     re_path('bookstore/(?P<version>(v1|v2))/', include('product.urls')),
 ]
