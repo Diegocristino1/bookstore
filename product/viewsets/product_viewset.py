@@ -37,6 +37,7 @@ class ProductViewSet(ModelViewSet):
     """
     # Permite qualquer pessoa acessar este endpoint (sem token necessário)
     serializer_class = ProductSerializer
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def get_queryset(self):
