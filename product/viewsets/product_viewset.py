@@ -35,6 +35,7 @@ class ProductViewSet(ModelViewSet):
     - PUT /bookstore/v1/products/{id}/ - Atualizar produto
     - DELETE /bookstore/v1/products/{id}/ - Deletar produto
     """
+    # Permite qualquer pessoa acessar este endpoint (sem token necessário)
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
 

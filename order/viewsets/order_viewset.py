@@ -44,8 +44,12 @@ class OrderViewSet(ModelViewSet):
     curl -H "Authorization: Bearer {token}" \\
          http://localhost:8000/bookstore/v1/orders/
     """
+    # Configuração de autenticação - Requer Bearer token válido
     authentication_classes = [TokenAuthentication]
+
+    # Configuração de permissão - Apenas usuários autenticados podem acessar
     permission_classes = [IsAuthenticated]
+
     serializer_class = OrderSerializer
 
     def get_queryset(self):

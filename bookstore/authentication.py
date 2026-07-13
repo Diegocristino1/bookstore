@@ -43,11 +43,15 @@ class CustomTokenAuthentication(BaseTokenAuthentication):
         Retorna: tupla (user, token) ou levanta AuthenticationFailed
         """
         try:
+            # Busca o token no banco de dados e carrega o usuário associado
             token = Token.objects.select_related('user').get(key=key)
         except Token.DoesNotExist:
+            # Token não existe - retorna erro de autenticação
             raise AuthenticationFailed('Token inválido.')
 
+        # Verifica se o usuário está ativo (não foi deletado ou desativado)
         if not token.user.is_active:
             raise AuthenticationFailed('Usuário inativo ou deletado.')
 
+        # Retorna o usuário e o token para uso no request
         return (token.user, token)

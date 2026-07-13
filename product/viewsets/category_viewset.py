@@ -35,6 +35,7 @@ class CategoryViewSet(ModelViewSet):
     - PUT /bookstore/v1/categories/{id}/ - Atualizar categoria
     - DELETE /bookstore/v1/categories/{id}/ - Deletar categoria
     """
+    # Permite qualquer pessoa acessar este endpoint (sem token necessário)
     serializer_class = CategorySerializer
     permission_classes = [AllowAny]
 

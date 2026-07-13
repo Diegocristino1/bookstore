@@ -48,11 +48,15 @@ def register_view(request):
     email = request.data.get('email')
     password = request.data.get('password')
 
+    # Verifica se o usuário já existe no sistema
     if User.objects.filter(username=username).exists():
         return Response({'error': 'Usuário já existe.'}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Cria novo usuário com as credenciais fornecidas
     user = User.objects.create_user(
         username=username, email=email, password=password)
+
+    # Gera token Bearer para o novo usuário
     token, _ = Token.objects.get_or_create(user=user)
 
     return Response({
@@ -88,13 +92,17 @@ def login_view(request):
     password = request.data.get('password')
 
     try:
+        # Busca o usuário pelo username
         user = User.objects.get(username=username)
     except User.DoesNotExist:
+        # Usuário não encontrado - retorna erro
         return Response({'error': 'Usuário não encontrado.'}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Valida a senha fornecida contra a senha armazenada
     if not user.check_password(password):
         return Response({'error': 'Senha incorreta.'}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Obtém ou cria um novo token para o usuário autenticado
     token, _ = Token.objects.get_or_create(user=user)
 
     return Response({
@@ -122,5 +130,7 @@ def logout_view(request):
     curl -X POST http://localhost:8000/api/auth/logout/ \\
         -H "Authorization: Bearer {token}"
     """
+    # Deleta o token do usuário, invalidando-o
     request.user.auth_token.delete()
+
     return Response({'message': 'Logout realizado com sucesso.'}, status=status.HTTP_200_OK)
