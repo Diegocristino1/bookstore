@@ -1,4 +1,6 @@
+from django.contrib.auth import get_user_model
 from django.urls import reverse
+from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -8,6 +10,14 @@ from product.factories import CategoryFactory, ProductFactory, UserFactory
 
 
 class OrderViewSetTestCase(APITestCase):
+    def setUp(self):
+        self.auth_user = get_user_model().objects.create_user(
+            username="order_tester",
+            password="secret123",
+        )
+        token = Token.objects.create(user=self.auth_user)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
+
     def test_list_orders(self):
         OrderFactory()
         OrderFactory()
