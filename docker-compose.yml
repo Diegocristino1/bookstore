@@ -10,6 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bookstore_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bookstore -d bookstore"]
       interval: 10s
@@ -36,6 +38,12 @@ services:
         condition: service_healthy
     volumes:
       - .:/app
+    networks:
+      - bookstore_network
 
 volumes:
   postgres_data:
+
+networks:
+  bookstore_network:
+    driver: bridge
