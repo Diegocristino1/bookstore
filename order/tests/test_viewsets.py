@@ -19,7 +19,7 @@ class OrderViewSetAuthTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_orders_endpoint_accepts_token_authentication(self):
-        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token.key}")
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token.key}")
         response = self.client.get("/bookstore/v1/orders/")
 
         self.assertEqual(response.status_code, 200)

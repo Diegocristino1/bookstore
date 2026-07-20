@@ -42,4 +42,4 @@ class ProductViewSet(ModelViewSet):
 
     def get_queryset(self):
         """Retorna todos os produtos disponíveis."""
-        return Product.objects.all()
+        return Product.objects.all().order_by('id')

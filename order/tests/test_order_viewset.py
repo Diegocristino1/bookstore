@@ -1,5 +1,6 @@
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
 from order.factories import OrderFactory
@@ -8,6 +9,11 @@ from product.factories import CategoryFactory, ProductFactory, UserFactory
 
 
 class OrderViewSetTestCase(APITestCase):
+    def setUp(self):
+        self.user = UserFactory()
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token.key}")
+
     def test_list_orders(self):
         OrderFactory()
         OrderFactory()

@@ -41,4 +41,4 @@ class CategoryViewSet(ModelViewSet):
 
     def get_queryset(self):
         """Retorna todas as categorias disponíveis."""
-        return Category.objects.all()
+        return Category.objects.all().order_by('id')
