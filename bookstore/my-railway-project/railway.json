@@ -1,0 +1,17 @@
+{
+  "build": {
+    "command": "npm install && npm run build",
+    "output": "dist"
+  },
+  "start": {
+    "command": "node src/app.js"
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "DATABASE_URL": "your_database_url_here",
+    "PORT": "3000"
+  },
+  "deploy": {
+    "branch": "main"
+  }
+}
