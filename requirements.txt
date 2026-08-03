@@ -7,3 +7,4 @@ django-extensions==4.1
 factory-boy==3.3.3
 pytest==9.0.3
 pytest-django==4.11.1
+setuptools>=83.0.0
