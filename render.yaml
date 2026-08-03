@@ -4,8 +4,8 @@ services:
     env: docker
     plan: free
     dockerfilePath: Dockerfile
-  buildCommand: 'poetry install --no-root'
-  startCommand: 'gunicorn bookstore.wsgi:application --bind 0.0.0.0:$PORT --workers 1'
+    buildCommand: 'poetry install --no-root'
+    startCommand: 'gunicorn bookstore.wsgi:application --bind 0.0.0.0:$PORT --workers 1'
     envVars:
       - key: SECRET_KEY
         value: ''
