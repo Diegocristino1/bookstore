@@ -52,7 +52,7 @@ ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
         "ALLOWED_HOSTS",
-        "localhost,127.0.0.1,.onrender.com,.herokuapp.com",
+        "localhost,127.0.0.1,.onrender.com,.herokuapp.com,ebac-bookstore-api.herokuapp.com,ebac-bookstore-app.herokuapp.com,limitless-atoll-51647.herokuapp.com",
     ).split(",")
     if host.strip()
 ]
