@@ -4,8 +4,10 @@ services:
     env: docker
     plan: free
     dockerfilePath: Dockerfile
-    buildCommand: 'poetry install --no-root'
-    startCommand: 'gunicorn bookstore.wsgi:application --bind 0.0.0.0:$PORT --workers 1'
+  buildCommand: 'pip install -r requirements.txt'
+  # Use python -m gunicorn so the module runs in the same Python
+  # environment that installed the packages (avoids pkg_resources issues)
+  startCommand: 'python -m gunicorn bookstore.wsgi:application --bind 0.0.0.0:$PORT --workers 1'
     envVars:
       - key: SECRET_KEY
         value: ''
