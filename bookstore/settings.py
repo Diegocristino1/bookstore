@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
+<<<<<<< HEAD
+=======
+import sys
+
+import dj_database_url
+>>>>>>> 863831ccf4a6d1e4690c678d0b04d9751556a46e
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,12 +27,45 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+<<<<<<< HEAD
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-_264m@l!!j#bsoaac@)v72+@u_tplzp91ava3j-_7wadm(=@ef")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+=======
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-insecure-_264m@l!!j#bsoaac@)v72+@u_tplzp91ava3j-_7wadm(=@ef",
+)
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv("DEBUG", "False").lower() in {"1", "true", "yes", "on"}
+TESTING = (
+    "test" in sys.argv
+    or any("pytest" in arg for arg in sys.argv)
+    or "PYTEST_CURRENT_TEST" in os.environ
+)
+
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1,.onrender.com,.herokuapp.com",
+    ).split(",")
+    if host.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "CSRF_TRUSTED_ORIGINS",
+        "https://*.onrender.com",
+    ).split(",")
+    if origin.strip()
+]
+>>>>>>> 863831ccf4a6d1e4690c678d0b04d9751556a46e
 
 
 # Application definition
@@ -57,6 +96,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+if not TESTING:
+    MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
 ROOT_URLCONF = "bookstore.urls"
 
 TEMPLATES = [
@@ -83,12 +125,26 @@ WSGI_APPLICATION = "bookstore.wsgi.application"
 # use Postgres configured via environment variables.
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+<<<<<<< HEAD
 if DEBUG:
+=======
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+        )
+    }
+else:
+>>>>>>> 863831ccf4a6d1e4690c678d0b04d9751556a46e
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
+<<<<<<< HEAD
     }
 else:
     DATABASES = {
@@ -100,6 +156,8 @@ else:
             "HOST": os.environ.get("DB_HOST", "localhost"),
             "PORT": os.environ.get("DB_PORT", "5432"),
         }
+=======
+>>>>>>> 863831ccf4a6d1e4690c678d0b04d9751556a46e
     }
 
 
@@ -137,11 +195,27 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+<<<<<<< HEAD
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
 
 # WhiteNoise: enable compressed static files and caching
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+=======
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+if not DEBUG and not TESTING:
+    # Render forwards the original protocol; this allows Django to detect HTTPS correctly.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+>>>>>>> 863831ccf4a6d1e4690c678d0b04d9751556a46e
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
