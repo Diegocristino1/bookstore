@@ -2,6 +2,7 @@
 name = "bookstore"
 version = "0.1.0"
 description = "Bookstore API"
+readme = "README.md"
 authors = [
     {name = "Diego cristino",email = "Diegocristino77@gmail.com"}
 ]
@@ -13,7 +14,9 @@ dependencies = [
     "django (>=6.0.6,<7.0.0)",
     "djangorestframework (>=3.17.1,<4.0.0)",
     "django-extensions (>=4.1,<5.0)",
-    "psycopg[binary] (>=3.2.0,<4.0.0)"
+    "psycopg[binary] (>=3.2.0,<4.0.0)",
+    "gunicorn (>=20.1.0,<21.0.0)",
+    "whitenoise (>=6.0,<7.0)"
 ]
 
 [tool.pytest.ini_options]

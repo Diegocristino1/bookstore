@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: bookstore-web
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+  buildCommand: 'poetry install --no-root'
+  startCommand: 'gunicorn bookstore.wsgi:application --bind 0.0.0.0:$PORT --workers 1'
+    envVars:
+      - key: SECRET_KEY
+        value: ''
+      - key: DEBUG
+        value: 'False'
+      - key: DB_HOST
+        value: ''
+      - key: DB_NAME
+        value: ''
+      - key: DB_USER
+        value: ''
+      - key: DB_PASSWORD
+        value: ''
+      - key: DB_PORT
+        value: '5432'
