@@ -5,14 +5,13 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock* ./
-
-RUN pip install --upgrade pip && pip install poetry
-RUN poetry config virtualenvs.create false && poetry install --no-root --no-interaction --no-ansi
+# Install runtime dependencies via pip for predictable builds
+COPY requirements.txt ./
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Collect static files (if any) into /app/static
+# Collect static files (if any)
 ENV DJANGO_SETTINGS_MODULE=bookstore.settings
 RUN python manage.py collectstatic --noinput || true
 

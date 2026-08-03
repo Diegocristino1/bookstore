@@ -21,7 +21,8 @@ services:
   web:
     build: .
     container_name: bookstore-web
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    # Run migrations and start gunicorn for a production-like environment
+    command: sh -c "python manage.py migrate --noinput && gunicorn bookstore.wsgi:application --bind 0.0.0.0:8000 --workers 1"
     environment:
       DB_HOST: db
       DB_NAME: bookstore
@@ -36,8 +37,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - .:/app
+    # For development you can mount the source directory, but for a predictable
+    # container run in this tutorial we avoid mounting the host directory.
+    # volumes:
+    #   - .:/app
     networks:
       - bookstore_network
 
