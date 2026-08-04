@@ -1,41 +1,25 @@
 __pycache__/
+*.py[cod]
+*$py.class
 *.pyc
 env/
-db.sqlite3
-.env
-.venv
+venv/
+.venv/
 /.venv
+db.sqlite3
+*.sqlite3
+.env
 *.egg-info/
 dist/
 build/
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Virtual environments
-.venv/
-venv/
-env/
-
-# Test and tooling caches
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-
-# Coverage and test output
 .coverage
 .coverage.*
 htmlcov/
-
-# Local databases
-db.sqlite3
-*.sqlite3
-
-# Logs
+staticfiles/
 *.log
-
-# Editor/OS files
 .vscode/
 .idea/
 .DS_Store

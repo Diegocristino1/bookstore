@@ -1,21 +1,25 @@
-FROM python:3.14-slim
+FROM python:3.14.6-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    POETRY_VERSION=2.1.4 \
+    POETRY_VIRTUALENVS_CREATE=false
 
 WORKDIR /app
 
-# Install runtime dependencies via pip for predictable builds
-COPY requirements.txt ./
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir "poetry==${POETRY_VERSION}"
+
+COPY pyproject.toml poetry.lock ./
+RUN poetry install --no-interaction --no-ansi --only main --no-root
 
 COPY . .
 
-# Collect static files (if any)
-ENV DJANGO_SETTINGS_MODULE=bookstore.settings
-RUN python manage.py collectstatic --noinput || true
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-# Run migrations on container start and then start gunicorn
-CMD ["/bin/sh", "-c", "python manage.py migrate --noinput && gunicorn bookstore.wsgi:application --bind 0.0.0.0:8000 --workers 1"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn bookstore.wsgi:application --bind 0.0.0.0:8000"]
