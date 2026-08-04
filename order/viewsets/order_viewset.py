@@ -21,6 +21,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from bookstore.authentication import CustomTokenAuthentication
 from order.models import Order
 from order.serializers import OrderSerializer
 
@@ -45,7 +46,7 @@ class OrderViewSet(ModelViewSet):
          http://localhost:8000/bookstore/v1/orders/
     """
     # Configuração de autenticação - Requer Bearer token válido
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [CustomTokenAuthentication, TokenAuthentication]
 
     # Configuração de permissão - Apenas usuários autenticados podem acessar
     permission_classes = [IsAuthenticated]
@@ -54,4 +55,4 @@ class OrderViewSet(ModelViewSet):
 
     def get_queryset(self):
         """Retorna todos os pedidos."""
-        return Order.objects.all()
+        return Order.objects.all().order_by("id")

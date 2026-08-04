@@ -1,0 +1,10 @@
+django==6.0.6
+djangorestframework==3.17.1
+psycopg-binary==3.2.13
+gunicorn==20.1.0
+whitenoise==6.0.0
+django-extensions==4.1
+factory-boy==3.3.3
+pytest==9.0.3
+pytest-django==4.11.1
+setuptools>=83.0.0

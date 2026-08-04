@@ -11,12 +11,12 @@ from product.factories import CategoryFactory, ProductFactory, UserFactory
 
 class OrderViewSetTestCase(APITestCase):
     def setUp(self):
-        self.auth_user = get_user_model().objects.create_user(
-            username="order_tester",
+        self.user = get_user_model().objects.create_user(
+            username="order-viewset-user",
             password="secret123",
         )
-        token = Token.objects.create(user=self.auth_user)
-        self.client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token.key}")
 
     def test_list_orders(self):
         OrderFactory()
