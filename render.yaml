@@ -15,9 +15,9 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: ALLOWED_HOSTS
-        value: localhost,127.0.0.1,.onrender.com
+        value: localhost,127.0.0.1,.onrender.com,bookstore-1-qmgv.onrender.com
       - key: CSRF_TRUSTED_ORIGINS
-        value: https://*.onrender.com
+        value: https://*.onrender.com,https://bookstore-1-qmgv.onrender.com
       - key: DATABASE_URL
         fromDatabase:
           name: bookstore-db
